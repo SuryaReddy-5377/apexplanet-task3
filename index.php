@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($password)) {
         $error = 'Please enter email and password!';
     } else {
-        // Get user with role
         $stmt = mysqli_prepare($conn, "
             SELECT u.id, u.first_name, u.last_name, u.email, u.password, u.role_id, r.role_name 
             FROM users u 
@@ -25,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($user = mysqli_fetch_assoc($result)) {
             if (password_verify($password, $user['password'])) {
-                // Set session
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['first_name'] = $user['first_name'];
                 $_SESSION['last_name'] = $user['last_name'];
@@ -46,37 +44,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
+<div class="row justify-content-center" style="min-height: 80vh; align-items: center;">
+    <div class="col-lg-5 col-md-8 col-sm-10" data-aos="fade-up">
         <div class="card form-card animate-fade-in">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
                     <div class="brand-icon">
                         <i class="fas fa-lock"></i>
                     </div>
-                    <h2 class="fw-bold">Welcome Back</h2>
-                    <p class="text-muted">Login to your account</p>
+                    <h2 class="fw-bold welcome-title">Welcome Back</h2>
+                    <p class="text-muted subtitle-text">Login to continue your journey</p>
                 </div>
 
                 <?php if ($error): ?>
-                    <div class="alert alert-danger"><?php echo $error; ?></div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i><?php echo $error; ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 <?php endif; ?>
 
                 <form method="POST" action="">
                     <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" required>
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-envelope me-2"></i>Email Address
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required>
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 py-2">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>LOGIN
+                        <span class="btn-shimmer"></span>
                     </button>
                 </form>
-                <p class="text-center mt-3">
-                    Don't have an account? <a href="register.php">Register</a>
+                
+                <div class="divider">
+                    <span>New Here?</span>
+                </div>
+                
+                <p class="text-center mt-3 mb-0">
+                    <a href="register.php" class="text-decoration-none fw-semibold register-link">
+                        <i class="fas fa-user-plus me-2"></i>Create an Account
+                    </a>
                 </p>
             </div>
         </div>
